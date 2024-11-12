@@ -57,16 +57,11 @@ export default function terser(input: Options = {}) {
 
       try {
         let output: WorkerOutput;
+        const mergedOptions = merge({}, options || {}, defaultOptions);
         if (useWorker && worker) {
-          output = await worker.runWorker(
-            code,
-            serializeJavascript(merge({}, options || {}, defaultOptions))
-          );
+          output = await worker.runWorker(code, serializeJavascript(mergedOptions));
         } else {
-          output = await transform(
-            code,
-            merge({}, options || {}, defaultOptions)
-          );
+          output = await transform(code, mergedOptions);
         }
 
         const {
